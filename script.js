@@ -1,25 +1,42 @@
 'use strict';
 
-let idCnt = 0;
-
-const tdAdd = (content, tr) => {
-    const td = document.createElement('td');
-    td.innerHTML = content;
-    tr.appendChild(td);
-    return tr;
+const createStatusBtn = () => {
+    const statusBtn = document.createElement('button');
+    statusBtn.innerHTML = '作業中';
+    return statusBtn;
 };
 
+const createDeleteBtn = () => {
+    const deleteBtn = document.createElement('button');
+    deleteBtn.innerHTML = '削除';
+    return deleteBtn;
+};
+
+const addData = (data) => {
+    const tr = document.createElement('tr')
+    data.forEach((item,index) => {
+        const td = document.createElement('td');
+        if(typeof item !== 'object') {
+            td.innerHTML = item;
+        } else {
+            td.appendChild(item);
+        } 
+        tr.appendChild(td);
+    });
+    document.getElementById('addData').appendChild(tr);
+};
+
+let idCnt = 0;
 document.getElementById('addBtn').addEventListener('click',(event)=>{
     event.preventDefault();
-    const id = idCnt;
-    const comment = document.getElementById('form').comment.value;
+    let data = [];
 
-    let tr = document.createElement('tr');
-    tr = tdAdd(id,tr);
-    tr = tdAdd(comment,tr);
-    tr = tdAdd('<button>作業中</button>',tr);
-    tr = tdAdd('<button>削除</button>',tr);
-    document.getElementById('addData').appendChild(tr);
+    data[0] = idCnt;                                            //ID
+    data[1] = document.getElementById('form').comment.value;    //コメント
+    data[2] = createStatusBtn();                                //ステータスボタン
+    data[3] = createDeleteBtn();                                //削除ボタン
+    
+    addData(data);
 
     document.getElementById('form').comment.value = "";
     idCnt++;
